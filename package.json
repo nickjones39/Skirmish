@@ -7,7 +7,8 @@
 		"check": "tsc --noEmit src/game.ts"
 	},
 	"dependencies": {
-		"kaboom": "^3000.0.0-beta.0"
+		"kaboom": "^3000.0.0-beta.0",
+		"rot-js": "^2.2.0"
 	},
 	"devDependencies": {
 		"esbuild": "^0.15.9",
