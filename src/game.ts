@@ -1,24 +1,33 @@
 import * as ROT from 'rot-js';
 import kaboom from "kaboom"
 import "kaboom/global"
-import { Engine } from './Engine';
+import { Entity } from './entity';
+import { Engine } from './engine';
 
-
+declare global {
+  interface Window {
+    engine: Engine;
+  }
+}
 
 window.addEventListener('DOMContentLoaded', () => {
-  const engine = new Engine();
+  const npc = new Entity(
+    Engine.WIDTH / 2 - 5,
+    Engine.HEIGHT / 2,
+    '@',
+    '#ffff00',
+  );
+  const player = new Entity(Engine.WIDTH / 2, Engine.HEIGHT / 2, '@');
+  const entities = [npc, player];
+  window.engine = new Engine(entities, player);
+});
 
-  const container = engine.display.getContainer()!;
 
-  document.body.appendChild(container);
-
-  engine.render();
-})
 
 
 kaboom({
     font: 'sinko',
-    scale: 4,
+    scale: 3,
   })
   
   loadSpriteAtlas('assets/HumansSpriteSheet.png', {
@@ -39,21 +48,45 @@ kaboom({
   })
   
   scene('game', () => {
-      
-    const engine = new Engine();
 
+    var moveX: number
+    var moveY: number
+    var scale: number = 4;
+
+    const npc = new Entity(
+        Engine.WIDTH / 2 - 5,
+        Engine.HEIGHT / 2,
+        '@',
+        '#ffff00',
+      );
+      const player = new Entity(Engine.WIDTH / 2, Engine.HEIGHT / 2, '@');
+      const entities = [npc, player];
+      var e = new Engine(entities, player);
+        
       const pikeman = add([
           sprite('humansPikeman'),
-          pos(engine.RotX, engine.RotY)  
+          pos(e.player.x * 4, e.player.y * scale), 
+          moveX = e.player.x,
+          moveY = e.player.y 
       ])
   
       pikeman.play("idle")
       
-      //onUpdate(() => {
+      onUpdate(() => {
           //pikeman.play("idle")
-      //});
+          //if(moveX !== e.player.x) {
+            pikeman.pos.x = e.player.x * scale
+          //}
+          //if(moveY !== e.player.y) {
+            pikeman.pos.y = e.player.y * scale
+          //}
+          //moveX = e.player.x
+          //moveY = e.player.y
+      });
   
       onClick(() => addKaboom(mousePos()))
+
+      
     
   });
   
