@@ -11,16 +11,19 @@ declare global {
   }
 }
 
+const npc = new Entity(
+  Engine.WIDTH, // - 5,
+  Engine.HEIGHT, // 2,
+  '@',
+  '#ffff00',
+);
+const player = new Entity(Engine.WIDTH / 2, Engine.HEIGHT / 2, '@');
+const entities = [npc, player];
+const engine = new Engine(entities, player);
+
 window.addEventListener('DOMContentLoaded', () => {
-  const npc = new Entity(
-    Engine.WIDTH, // - 5,
-    Engine.HEIGHT, // 2,
-    '@@',
-    '#ffff00',
-  );
-  const player = new Entity(Engine.WIDTH / 2, Engine.HEIGHT / 2, '@@');
-  const entities = [npc, player];
-  window.engine = new Engine(entities, player);
+  
+  window.engine = engine //new Engine(entities, player);
 
 });
 
@@ -74,15 +77,15 @@ scene('game', () => {
   var moveY: number
   var scale: number = 16;
 
-  const npc = new Entity(
-      Engine.WIDTH,
-      Engine.HEIGHT,
-      '@@',
-      '#ffff00',
-    );
-    const player = new Entity(Engine.WIDTH, Engine.HEIGHT, '@@');
-    const entities = [npc, player];
-    var engine = new Engine(entities, player);
+  // const npc = new Entity(
+  //     Engine.WIDTH,
+  //     Engine.HEIGHT,
+  //     '@',
+  //     '#ffff00',
+  //   );
+  //   const player = new Entity(Engine.WIDTH, Engine.HEIGHT, '@');
+  //   const entities = [npc, player];
+    //var engine = new Engine(entities, player);
     
     //var wall = add([
      // sprite('tileWall'),
