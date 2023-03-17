@@ -1,0 +1,6 @@
+# Ignore log files
+*.log
+
+# Ignore files in the node_modules directory
+node_modules/
+src/types/
