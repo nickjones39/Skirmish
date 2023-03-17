@@ -7,7 +7,7 @@ import { Engine } from './engine';
 
 import { Configuration, OpenAIApi } from "openai";
 
-const key = "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"  //process.env.OPENAI_API_KEY
+const key = process.env.OPENAI_API_KEY
 
 const configuration = new Configuration({
     organization: "org-OXqdu7b2onTGvEGGepy5TB0X",
