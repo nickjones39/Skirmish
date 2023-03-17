@@ -14,6 +14,8 @@ export class Engine {
   public static readonly MAX_ROOM_SIZE = 10;
   public static readonly MAX_ROOMS = 30;
 
+  public static isTweening: boolean = false
+
   display: ROT.Display;
   gameMap: GameMap;
 
@@ -43,20 +45,22 @@ export class Engine {
     );
 
     window.addEventListener('keydown', (event) => {
-      this.update(event);
+        this.update(event);
     });
 
     this.render();
   }
 
   update(event: KeyboardEvent) {
-    this.display.clear();
-    const action = handleInput(event);
+    if(!Engine.isTweening) {
+      this.display.clear();
+      const action = handleInput(event);
 
-    if (action) {
-      action.perform(this, this.player);
+      if (action) {
+        action.perform(this, this.player);
+      }
+      this.render();
     }
-    this.render();
   }
 
   render() {

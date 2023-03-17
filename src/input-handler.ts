@@ -15,12 +15,12 @@ export class MovementAction implements Action {
   }
 
   perform(engine: Engine, entity: Entity) {
-    const destX = entity.x + this.dx;
-    const destY = entity.y + this.dy;
-
-    if (!engine.gameMap.isInBounds(destX, destY)) return;
-    if (!engine.gameMap.tiles[destY][destX].walkable) return;
-    entity.move(this.dx, this.dy);
+      const destX = entity.x + this.dx;
+      const destY = entity.y + this.dy;
+  
+      if (!engine.gameMap.isInBounds(destX, destY)) return;
+      if (!engine.gameMap.tiles[destY][destX].walkable) return;
+      entity.move(this.dx, this.dy);
   }
 }
 
@@ -36,5 +36,5 @@ const MOVE_KEYS: MovementMap = {
 };
 
 export function handleInput(event: KeyboardEvent): Action {
-  return MOVE_KEYS[event.key];
+    return MOVE_KEYS[event.key];
 }
