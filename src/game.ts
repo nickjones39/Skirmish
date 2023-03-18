@@ -21,6 +21,13 @@ const openai = new OpenAIApi(configuration);
 
 
 
+declare global {
+  interface Window {
+    engine: Engine;
+    messageLog: MessageLog;
+  }
+}
+
 
 // declare global {
 //   interface Window {
@@ -107,10 +114,10 @@ scene('game', () => {
 
     const pikeman = add([
         sprite('humansPikeman'),
-        //pos(window.engine.player.x * scale, window.engine.player.y * scale), 
-        //moveX = window.engine.player.x,
-        //moveY = window.engine.player.y,
-        pos(0,0),
+        pos(window.engine.player.x * scale, window.engine.player.y * scale), 
+        moveX = window.engine.player.x,
+        moveY = window.engine.player.y,
+        //pos(0,0),
 
     ])
 
