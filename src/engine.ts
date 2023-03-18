@@ -3,7 +3,7 @@ import * as ROT from 'rot-js';
 import { BaseInputHandler, GameInputHandler } from './input-handler';
 import { Actor, spawnPlayer } from './entity';
 import { BaseScreen } from './screens/base-screen';
-// import { GameScreen } from './screens/game-screen';
+import { GameScreen } from './screens/game-screen';
 import { MainMenu } from './screens/main-menu';
 
 export class Engine {
@@ -45,8 +45,8 @@ export class Engine {
       this.screen.render();
     });
 
-    // this.screen = new GameScreen(this.display, this.player);
-    this.screen = new MainMenu(this.display, this.player);
+    this.screen = new GameScreen(this.display, this.player);
+    //this.screen = new MainMenu(this.display, this.player);
   }
 
   update(event: KeyboardEvent) {
