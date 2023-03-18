@@ -1,72 +1,59 @@
 import * as ROT from 'rot-js';
 
-import { handleInput } from './input-handler';
-import { Entity } from './entity';
-import { GameMap } from './game-map';
-import { generateDungeon } from './procgen';
+import { BaseInputHandler, GameInputHandler } from './input-handler';
+import { Actor, spawnPlayer } from './entity';
+import { BaseScreen } from './screens/base-screen';
+// import { GameScreen } from './screens/game-screen';
+import { MainMenu } from './screens/main-menu';
 
 export class Engine {
-  public static readonly WIDTH = 60;
+  public static readonly WIDTH = 80;
   public static readonly HEIGHT = 50;
-  public static readonly MAP_WIDTH = 55;
-  public static readonly MAP_HEIGHT = 45;
-  public static readonly MIN_ROOM_SIZE = 6;
-  public static readonly MAX_ROOM_SIZE = 10;
-  public static readonly MAX_ROOMS = 30;
+  public static readonly MAP_WIDTH = 80;
+  public static readonly MAP_HEIGHT = 43;
 
-  public static isTweening: boolean = false
+  public isTweening: boolean = false;
 
   display: ROT.Display;
-  gameMap: GameMap;
+  inputHandler: BaseInputHandler;
+  screen: BaseScreen;
+  player: Actor;
 
-  public player: Entity;
-  entities: Entity[];
-
-  constructor(entities: Entity[], player: Entity) {
-    this.entities = entities;
-    this.player = player;
-
+  constructor() {
     this.display = new ROT.Display({
       width: Engine.WIDTH,
       height: Engine.HEIGHT,
       forceSquareRatio: true,
     });
+    this.player = spawnPlayer(
+      Math.floor(Engine.MAP_WIDTH / 2),
+      Math.floor(Engine.MAP_HEIGHT / 2),
+    );
     const container = this.display.getContainer()!;
     document.body.appendChild(container);
 
-    this.gameMap = generateDungeon(
-      Engine.MAP_WIDTH,
-      Engine.MAP_HEIGHT,
-      Engine.MAX_ROOMS,
-      Engine.MIN_ROOM_SIZE,
-      Engine.MAX_ROOM_SIZE,
-      player,
-      this.display,
-    );
+    this.inputHandler = new GameInputHandler();
 
     window.addEventListener('keydown', (event) => {
-        this.update(event);
+      this.update(event);
     });
 
-    this.render();
+    window.addEventListener('mousemove', (event) => {
+      this.screen.inputHandler.handleMouseMovement(
+        this.display.eventToPosition(event),
+      );
+      this.screen.render();
+    });
+
+    // this.screen = new GameScreen(this.display, this.player);
+    this.screen = new MainMenu(this.display, this.player);
   }
 
   update(event: KeyboardEvent) {
-    if(!Engine.isTweening) {
-      this.display.clear();
-      const action = handleInput(event);
-
-      if (action) {
-        action.perform(this, this.player);
-      }
-      this.render();
+    const screen = this.screen.update(event);
+    if (!Object.is(screen, this.screen)) {
+      this.screen = screen;
+      this.screen.render();
     }
-  }
-
-  render() {
-    this.gameMap.render();
-    this.entities.forEach((e) => {
-      this.display.draw(e.x, e.y, e.char, e.fg, e.bg);
-    });
   }
 }
