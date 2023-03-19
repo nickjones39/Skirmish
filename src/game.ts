@@ -1,17 +1,18 @@
-
 import kaboom, { DrawTextOpt, GameObj } from "kaboom"
 import "kaboom/global"
-
 import { Entity } from './entity';
 import { Engine } from './engine';
 import { GameMap } from "./game-map";
 import { MessageLog } from './message-log';
 import { Colors } from './colors';
 
+
 import { Configuration, OpenAIApi } from "openai";
 import { kDrawModel } from "./kDrawModel";
 
-const key = "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" //process.env.OPENAI_API_KEY
+import {env} from './types/environment'
+
+const key = env.OPENAI_API_KEY
 
 const configuration = new Configuration({
     organization: "org-OXqdu7b2onTGvEGGepy5TB0X",
