@@ -9,8 +9,9 @@ import { MessageLog } from './message-log';
 import { Colors } from './colors';
 
 import { Configuration, OpenAIApi } from "openai";
+import { kDrawModel } from "./kDrawModel";
 
-const key = "" //process.env.OPENAI_API_KEY
+const key = "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" //process.env.OPENAI_API_KEY
 
 const configuration = new Configuration({
     organization: "org-OXqdu7b2onTGvEGGepy5TB0X",
@@ -24,10 +25,25 @@ const openai = new OpenAIApi(configuration);
 declare global {
   interface Window {
     engine: Engine;
-    messageLog: MessageLog;
+    //messageLog: MessageLog;
   }
 }
 
+const e = new Engine();
+
+window.addEventListener('DOMContentLoaded', () => {
+  
+  //window.messageLog = new MessageLog();
+  //e = new Engine();
+  window.engine = e;
+  // wwindow.messageLog.addMessage(
+  //   'Hello and welcome, adventurer, to yet another dungeon!',
+  //   Colors.WelcomeText,
+  // );
+  //window.engine.screen.render();
+
+
+});
 
 // declare global {
 //   interface Window {
@@ -49,11 +65,9 @@ declare global {
 // var tick : number;
 
 // window.addEventListener('DOMContentLoaded', () => {
-//   window.engine = engine
+//   e = engine
 // });
 
-window.addEventListener('DOMContentLoaded', () => {
-  
 
 
 
@@ -84,13 +98,30 @@ loadSpriteAtlas('assets/HumansSpriteSheet.png', {
 })
 
 loadSpriteAtlas('assets/Dungeon-Tileset.png', {
-  'tileWall': {
+  '.': {
       x: 0,
-      y: 16,
+      y: 0,
       width: 256,
       height: 368,
       sliceX: 16,
-      sliceY: 23
+      sliceY: 23,
+      anims: {
+          floor: { from: 16, to: 16, loop: false },
+          void: { from: 0, to: 0, loop: false },
+          wall: { from: 60, to: 60, loop: false }
+      },
+  },
+})
+
+
+loadSpriteAtlas('assets/tileset.png', {
+  '#': {
+      x: 0,
+      y: 48,
+      width: 256,
+      height: 144,
+      sliceX: 16,
+      sliceY: 9
       //anims: {
       //    idle: { from: 0, to: 0, loop: true },
       //},
@@ -98,25 +129,20 @@ loadSpriteAtlas('assets/Dungeon-Tileset.png', {
 })
 
 
-
 scene('game', () => {
-
-  
-
 
   var moveX: number
   var moveY: number
   var scale: number = 16;
-  var tick: number
-  var moving: boolean
-  var animEnded: boolean = true
   var chatGPT: GameObj
+
+  var level: Array<GameObj> = new Array<GameObj>;
 
     const pikeman = add([
         sprite('humansPikeman'),
-        pos(window.engine.player.x * scale, window.engine.player.y * scale), 
-        moveX = window.engine.player.x,
-        moveY = window.engine.player.y,
+        pos(e.player.x * scale, e.player.y * scale), 
+        moveX = e.player.x,
+        moveY = e.player.y,
         //pos(0,0),
 
     ])
@@ -173,87 +199,59 @@ scene('game', () => {
       
     })
       
-    
 
+    // kDrawModel.levelMap.forEach((item) => {
+    //   add([
+    //     sprite(' '),
+    //     pos(item.x * 16, item.y * 16),
+    //     play('floor')
+    //   ])
+    // })
+      
+      
+    // kDrawModel.levelMap.forEach((item) => {
+    //   var tile = add([
+    //     sprite(' '),
+    //     pos(item.x * 16, item.y * 16),
+    //   ])
+    //   tile.play('floor');
+    //   level.push(tile);
+    // })
+          
+    
+   
 
     onUpdate(() => {
 
+      e.screen.render()
+
       readd(pikeman)
 
-      // tick++
+      kDrawModel.levelMap.forEach((item) => {
+        if (item.tile.visible || item.tile.seen) {
+          if (item.char == '#') {
+            drawSprite({
+              sprite: '#',
+              pos: vec2(item.x * 16, item.y * 16),
+            })
+          }
+          if (item.char == '.') {
+            drawSprite({
+              sprite: '.',
+              pos: vec2(item.x * 16, item.y * 16),
+              frame: 16,
+            })
+          }
+        }
+      })
+          
 
-      // if (tick == 1) {
-      //   tick = 0
-      //   for (let y = 0; y < window.engine.gameMap.tiles.length; y++) {
-      //     const row = engine.gameMap.tiles[y];
-      //     for (let x = 0; x < row.length; x++) {
-      //       const tile = row[x];
-      //       if (tile.type == 'wall') {
-      //          add([
-      //            sprite('tileWall'),
-      //            pos(x * scale, y * scale),
-      //          ])
-      //       }
-      //     }
-      //   }
-      // }
-
-      
-
-
-      
-
-
-
-      if(!window.engine.isTweening && moveX !== window.engine.player.x) {
-        //pikeman.play("walk")
-        
-        const t = tween(
-          // start value (accepts number, Vec2 and Color)
-          pikeman.pos.x,
-          // destination value
-          window.engine.player.x * scale,
-          // duration (in seconds)
-          0.08,
-          // how value should be updated
-          (val) => pikeman.pos.x = val,
-          // interpolation function (defaults to easings.linear)
-          //easings[4],
-        )
-
-        window.engine.isTweening = true
-        animEnded = false
-
-        t.then(() => {
-          window.engine.isTweening = false;
-        });
-
-
-
+      if(moveX !== e.player.x) {
+        pikeman.pos.x = e.player.x * scale;
       }
 
-      if(!window.engine.isTweening && moveY !== window.engine.player.y) {
-        //pikeman.play("walk")
-        
-        const t = tween(
-          // start value (accepts number, Vec2 and Color)
-          pikeman.pos.y,
-          // destination value
-          window.engine.player.y * scale,
-          // duration (in seconds)
-          0.08,
-          // how value should be updated
-          (val) => pikeman.pos.y = val,
-          // interpolation function (defaults to easings.linear)
-          //easings[4],
-        )
-
-        window.engine.isTweening = true
-        animEnded = false
-
-        t.then(() => {
-          window.engine.isTweening = false;
-        });
+      if(moveY !== e.player.y) {
+        pikeman.pos.y = e.player.y * scale;
       }
 
       // pikeman.onAnimEnd((animName) => {
@@ -266,8 +264,8 @@ scene('game', () => {
       //   pikeman.play("idle")
       // }
 
-      moveX = window.engine.player.x
-      moveY = window.engine.player.y
+      moveX = e.player.x
+      moveY = e.player.y
 
     });
 
@@ -276,18 +274,7 @@ scene('game', () => {
 });
 
 
-
 go('game')
 
 
-window.messageLog = new MessageLog();
-  window.engine = new Engine();
-  //e = window.engine;
-  window.messageLog.addMessage(
-    'Hello and welcome, adventurer, to yet another dungeon!',
-    Colors.WelcomeText,
-  );
-  window.engine.screen.render();
 
-
-});

@@ -34,12 +34,12 @@ export enum InputState {
 export abstract class BaseInputHandler {
   nextHandler: BaseInputHandler;
   mousePosition: [number, number];
-  logCursorPosition: number;
+  //logCursorPosition: number;
 
   protected constructor(public inputState: InputState = InputState.Game) {
     this.nextHandler = this;
     this.mousePosition = [0, 0];
-    this.logCursorPosition = window.messageLog.messages.length - 1;
+    //this.logCursorPosition = window.messageLog.messages.length - 1;
   }
 
   abstract handleKeyboardInput(event: KeyboardEvent): Action | null;
@@ -137,14 +137,16 @@ export class LogInputHandler extends BaseInputHandler {
   }
 
   handleKeyboardInput(event: KeyboardEvent): Action | null {
-    if (event.key === 'Home') {
-      return new LogAction(() => (this.logCursorPosition = 0));
-    }
-    if (event.key === 'End') {
-      return new LogAction(
-        () => (this.logCursorPosition = window.messageLog.messages.length - 1),
-      );
-    }
+    
+
+    // if (event.key === 'Home') {
+    //   return new LogAction(() => (this.logCursorPosition = 0));
+    // }
+    // if (event.key === 'End') {
+    //   return new LogAction(
+    //     () => (this.logCursorPosition = window.messageLog.messages.length - 1),
+    //   );
+    // }
 
     const scrollAmount = LOG_KEYS[event.key];
 
@@ -153,23 +155,25 @@ export class LogInputHandler extends BaseInputHandler {
     }
 
     return new LogAction(() => {
-      if (scrollAmount < 0 && this.logCursorPosition === 0) {
-        this.logCursorPosition = window.messageLog.messages.length - 1;
-      } else if (
-        scrollAmount > 0 &&
-        this.logCursorPosition === window.messageLog.messages.length - 1
-      ) {
-        this.logCursorPosition = 0;
-      } else {
-        this.logCursorPosition = Math.max(
-          0,
-          Math.min(
-            this.logCursorPosition + scrollAmount,
-            window.messageLog.messages.length - 1,
-          ),
-        );
-      }
+      // if (scrollAmount < 0 && this.logCursorPosition === 0) {
+      //   this.logCursorPosition = window.messageLog.messages.length - 1;
+      // } else if (
+      //   scrollAmount > 0 &&
+      //   this.logCursorPosition === window.messageLog.messages.length - 1
+      // ) {
+      //   this.logCursorPosition = 0;
+      // } else {
+      //   this.logCursorPosition = Math.max(
+      //     0,
+      //     Math.min(
+      //       this.logCursorPosition + scrollAmount,
+      //       window.messageLog.messages.length - 1,
+      //     ),
+      //   );
+      // }
+    
     });
+  
   }
 }
 
@@ -224,7 +228,7 @@ export class InventoryInputHandler extends BaseInputHandler {
             return new DropItem(item);
           }
         } else {
-          window.messageLog.addMessage('Invalid entry.', Colors.Invalid);
+          //window.messageLog.addMessage('Invalid entry.', Colors.Invalid);
           return null;
         }
       }
@@ -356,7 +360,7 @@ export class LevelUpEventHandler extends BaseInputHandler {
     } else if (event.key === 'c') {
       window.engine.player.level.increaseDefense();
     } else {
-      window.messageLog.addMessage('Invalid entry.', Colors.Invalid);
+      //window.messageLog.addMessage('Invalid entry.', Colors.Invalid);
       return null;
     }
 

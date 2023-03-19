@@ -5,14 +5,13 @@ import { Actor, spawnPlayer } from './entity';
 import { BaseScreen } from './screens/base-screen';
 import { GameScreen } from './screens/game-screen';
 import { MainMenu } from './screens/main-menu';
+import { kDrawModel } from './kDrawModel';
 
 export class Engine {
   public static readonly WIDTH = 80;
   public static readonly HEIGHT = 50;
   public static readonly MAP_WIDTH = 80;
   public static readonly MAP_HEIGHT = 43;
-
-  public isTweening: boolean = false;
 
   display: ROT.Display;
   inputHandler: BaseInputHandler;
@@ -30,7 +29,7 @@ export class Engine {
       Math.floor(Engine.MAP_HEIGHT / 2),
     );
     const container = this.display.getContainer()!;
-    document.body.appendChild(container);
+    //document.body.appendChild(container);
 
     this.inputHandler = new GameInputHandler();
 

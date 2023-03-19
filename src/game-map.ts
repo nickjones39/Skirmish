@@ -3,12 +3,16 @@ import type { Tile } from './tile-types';
 import { WALL_TILE } from './tile-types';
 import { Display } from 'rot-js';
 import { Actor, Entity, Item } from './entity';
+import { kDrawModel } from './kDrawModel';
+import { Engine } from './engine';
 
 export class GameMap {
   tiles: Tile[][];
   downstairsLocation: [number, number];
+  public kList: Array<kDrawModel> = new Array<kDrawModel>;
 
   constructor(
+    
     public width: number,
     public height: number,
     public display: Display,
@@ -95,6 +99,13 @@ export class GameMap {
   }
 
   render() {
+
+    //if (kDrawModel.kaboomDraw) {
+      kDrawModel.oldLevelMap = kDrawModel.levelMap
+      kDrawModel.levelMap = new Array<kDrawModel>
+    //}
+    
+
     for (let y = 0; y < this.tiles.length; y++) {
       const row = this.tiles[y];
       for (let x = 0; x < row.length; x++) {
@@ -114,16 +125,32 @@ export class GameMap {
           bg = tile.dark.bg;
         }
 
-        this.display.draw(x, y, char, fg, bg);
+        //this.display.draw(x, y, char, fg, bg);
         
-        if (tile.visible) {
-           add([
-             sprite('tileWall'),
-            pos(x * 16, y * 16),
-           ])
-        }
+        //if (kDrawModel.kaboomDraw) {
+          var kDraw = new kDrawModel(tile, x, y, char, fg, bg)
+          kDrawModel.levelMap.push(kDraw);
+        //}
+
+        // if (tile.visible) {
+        //    add([
+        //      sprite(' '),
+        //     pos(x * 16, y * 16),
+        //    ])
+           
+        // }
+
+        // if (char == '#') {
+        //   add([
+        //     sprite('#'),
+        //    pos(x * 16, y * 16),
+        //   ])
+        // }
+        
       }
     }
+
+    //kDrawModel.kList = this.kList
 
     const sortedEntities = this.entities
       .slice()
@@ -131,7 +158,7 @@ export class GameMap {
 
     sortedEntities.forEach((e) => {
       if (this.tiles[e.y][e.x].visible) {
-        this.display.draw(e.x, e.y, e.char, e.fg, e.bg);
+        //this.display.draw(e.x, e.y, e.char, e.fg, e.bg);
       }
     });
   }
