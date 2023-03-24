@@ -101,8 +101,8 @@ export class GameMap {
   render() {
 
     //if (kDrawModel.kaboomDraw) {
-      kDrawModel.oldLevelMap = kDrawModel.levelMap
-      kDrawModel.levelMap = new Array<kDrawModel>
+      //kDrawModel.oldLevelMap = kDrawModel.levelMap
+      //kDrawModel.levelMap = new Array<kDrawModel>
     //}
     
 
@@ -125,11 +125,11 @@ export class GameMap {
           bg = tile.dark.bg;
         }
 
-        //this.display.draw(x, y, char, fg, bg);
+        this.display.draw(x, y, char, fg, bg);
         
         //if (kDrawModel.kaboomDraw) {
-          var kDraw = new kDrawModel(tile, x, y, char, fg, bg)
-          kDrawModel.levelMap.push(kDraw);
+        //  var kDraw = new kDrawModel(tile, x, y, char, fg, bg)
+        //  kDrawModel.levelMap.push(kDraw);
         //}
 
         // if (tile.visible) {
@@ -158,7 +158,7 @@ export class GameMap {
 
     sortedEntities.forEach((e) => {
       if (this.tiles[e.y][e.x].visible) {
-        //this.display.draw(e.x, e.y, e.char, e.fg, e.bg);
+        this.display.draw(e.x, e.y, e.char, e.fg, e.bg);
       }
     });
   }

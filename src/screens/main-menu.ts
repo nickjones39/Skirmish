@@ -51,7 +51,7 @@ export class MainMenu extends BaseScreen {
       const x = Math.floor(Engine.WIDTH / 2);
       const y = Math.floor(Engine.HEIGHT / 2 - 1 + i);
 
-      //this.display.draw(x, y, o.padEnd(MENU_WIDTH, ' '), '#fff', '#000');
+      this.display.draw(x, y, o.padEnd(MENU_WIDTH, ' '), '#fff', '#000');
     });
 
     if (this.showPopup) {
@@ -62,7 +62,7 @@ export class MainMenu extends BaseScreen {
       const x = options.width / 2 - Math.floor(width / 2);
       const y = options.height / 2 - Math.floor(height / 2);
       renderFrameWithTitle(x, y, width, height, 'Error');
-      //this.display.drawText(x + 1, y + 3, text);
+      this.display.drawText(x + 1, y + 3, text);
     }
   }
 }

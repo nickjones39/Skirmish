@@ -65,10 +65,10 @@ export class TakeStairsAction extends Action {
       entity.y == gameMap.downstairsLocation[1]
     ) {
       window.engine.screen.generateFloor();
-      // window.messageLog.addMessage(
-      //   'You descend the staircase.',
-      //   Colors.Descend,
-      // );
+      window.messageLog.addMessage(
+        'You descend the staircase.',
+        Colors.Descend,
+      );
     } else {
       throw new ImpossibleException('There are no stairs here.');
     }
@@ -135,16 +135,16 @@ export class MeleeAction extends ActionWithDirection {
     const fg =
       actor.name === 'Player' ? Colors.PlayerAttack : Colors.EnemyAttack;
     if (damage > 0) {
-      // window.messageLog.addMessage(
-      //   `${attackDescription} for ${damage} hit points.`,
-      //   fg,
-      // );
+      window.messageLog.addMessage(
+        `${attackDescription} for ${damage} hit points.`,
+        fg,
+      );
       target.fighter.hp -= damage;
     } else {
-      // window.messageLog.addMessage(
-      //   `${attackDescription} but does no damage.`,
-      //   fg,
-      // );
+      window.messageLog.addMessage(
+        `${attackDescription} but does no damage.`,
+        fg,
+      );
     }
   }
 }

@@ -119,7 +119,7 @@ export class GameScreen extends BaseScreen {
         this.gameMap.updateFov(this.player);
       } catch (error) {
         if (error instanceof ImpossibleException) {
-          //window.messageLog.addMessage(error.message, Colors.Impossible);
+          window.messageLog.addMessage(error.message, Colors.Impossible);
         }
       }
     }
@@ -132,7 +132,7 @@ export class GameScreen extends BaseScreen {
 
   render() {
     this.display.clear();
-    //window.messageLog.render(this.display, 21, 45, 40, 5);
+    window.messageLog.render(this.display, 21, 45, 40, 5);
 
     renderHealthBar(
       this.display,
@@ -148,27 +148,27 @@ export class GameScreen extends BaseScreen {
       this.gameMap,
     );
 
-    //this.display.drawText(0, 47, `Dungeon level: ${this.currentFloor}`);
+    this.display.drawText(0, 47, `Dungeon level: ${this.currentFloor}`);
 
     this.gameMap.render();
 
-    // if (this.inputHandler.inputState === InputState.Log) {
-    //   renderFrameWithTitle(3, 3, 74, 38, 'Message History');
-    //   window.messageLog.renderMessages(
-    //     this.display,
-    //     4,
-    //     4,
-    //     72,
-    //     36,
-    //     window.messageLog.messages.slice(
-    //       0,
-    //       this.inputHandler.logCursorPosition + 1,
-    //     ),
-    //   );
-    // }
+    if (this.inputHandler.inputState === InputState.Log) {
+      renderFrameWithTitle(3, 3, 74, 38, 'Message History');
+      window.messageLog.renderMessages(
+        this.display,
+        4,
+        4,
+        72,
+        36,
+        window.messageLog.messages.slice(
+          0,
+          this.inputHandler.logCursorPosition + 1,
+        ),
+      );
+    }
     if (this.inputHandler.inputState === InputState.Target) {
       const [x, y] = this.inputHandler.mousePosition;
-      //this.display.drawOver(x, y, null, '#000', '#fff');
+      this.display.drawOver(x, y, null, '#000', '#fff');
     }
     this.inputHandler.onRender(this.display);
   }
@@ -246,37 +246,37 @@ export class GameScreen extends BaseScreen {
       }
     }
 
-    // for (let e of parsedMap.entities) {
-    //   if (e.name === 'Orc') {
-    //     const orc = spawnOrc(map, e.x, e.y);
-    //     orc.fighter.hp = e.fighter?.hp || orc.fighter.hp;
-    //     if (e.aiType === 'confused') {
-    //       orc.ai = new ConfusedEnemy(orc.ai, e.confusedTurnsRemaining);
-    //     }
-    //   } else if (e.name === 'Troll') {
-    //     const troll = spawnTroll(map, e.x, e.y);
-    //     troll.fighter.hp = e.fighter?.hp || troll.fighter.hp;
-    //     if (e.aiType === 'confused') {
-    //       troll.ai = new ConfusedEnemy(troll.ai, e.confusedTurnsRemaining);
-    //     }
-    //   } else if (e.name === 'Health Potion') {
-    //     spawnHealthPotion(map, e.x, e.y);
-    //   } else if (e.name === 'Lightning Scroll') {
-    //     spawnLightningScroll(map, e.x, e.y);
-    //   } else if (e.name === 'Confusion Scroll') {
-    //     spawnConfusionScroll(map, e.x, e.y);
-    //   } else if (e.name === 'Fireball Scroll') {
-    //     spawnFireballScroll(map, e.x, e.y);
-    //   } else if (e.name === 'Dagger') {
-    //     spawnDagger(map, e.x, e.y);
-    //   } else if (e.name === 'Sword') {
-    //     spawnSword(map, e.x, e.y);
-    //   } else if (e.name === 'Leather Armor') {
-    //     spawnLeatherArmor(map, e.x, e.y);
-    //   } else if (e.name === 'Chain Mail') {
-    //     spawnChainMail(map, e.x, e.y);
-    //   }
-    // }
+    for (let e of parsedMap.entities) {
+      if (e.name === 'Orc') {
+        const orc = spawnOrc(map, e.x, e.y);
+        orc.fighter.hp = e.fighter?.hp || orc.fighter.hp;
+        if (e.aiType === 'confused') {
+          orc.ai = new ConfusedEnemy(orc.ai, e.confusedTurnsRemaining);
+        }
+      } else if (e.name === 'Troll') {
+        const troll = spawnTroll(map, e.x, e.y);
+        troll.fighter.hp = e.fighter?.hp || troll.fighter.hp;
+        if (e.aiType === 'confused') {
+          troll.ai = new ConfusedEnemy(troll.ai, e.confusedTurnsRemaining);
+        }
+      } else if (e.name === 'Health Potion') {
+        spawnHealthPotion(map, e.x, e.y);
+      } else if (e.name === 'Lightning Scroll') {
+        spawnLightningScroll(map, e.x, e.y);
+      } else if (e.name === 'Confusion Scroll') {
+        spawnConfusionScroll(map, e.x, e.y);
+      } else if (e.name === 'Fireball Scroll') {
+        spawnFireballScroll(map, e.x, e.y);
+      } else if (e.name === 'Dagger') {
+        spawnDagger(map, e.x, e.y);
+      } else if (e.name === 'Sword') {
+        spawnSword(map, e.x, e.y);
+      } else if (e.name === 'Leather Armor') {
+        spawnLeatherArmor(map, e.x, e.y);
+      } else if (e.name === 'Chain Mail') {
+        spawnChainMail(map, e.x, e.y);
+      }
+    }
     return [map, player, parsedMap.currentFloor];
   }
 
